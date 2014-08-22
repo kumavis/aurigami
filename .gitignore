@@ -1,0 +1,10 @@
+*.swp
+*.swo
+dist
+app/node_modules
+*.DS_Store
+log/
+app/npm-debug.log
+app/config/secrets.json
+app/public/js/core/models.js
+app/public/js/core/helpers.js
