@@ -2,9 +2,12 @@
 getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia).bind(navigator)
 AudioContext = (window.AudioContext || window.webkitAudioContext).bind(window)
 
-var client = new BinaryClient('ws://localhost:9001')
+var client = new BinaryClient('ws://localhost:5001')
 
 client.on('open', function() {
+
+  console.log('open connection')
+
 
   var connection = null
   var isRecording = false
@@ -14,9 +17,9 @@ client.on('open', function() {
   //
 
   if (getUserMedia) {
-    getUserMedia({audio:true}, setupSuccess, failSetup.bind('Error capturing audio.'))
+    getUserMedia({audio:true}, setupSuccess, setupFail.bind('Error capturing audio.'))
   } else {
-    failSetup('getUserMedia not supported in this browser.')
+    setupFail('getUserMedia not supported in this browser.')
   }
 
   //
@@ -28,13 +31,16 @@ client.on('open', function() {
 
     if (isRecording) {
 
-      connection = client.createStream({this:"That", foo:"Bar"})
-      isRecording = true
+      isRecording = false
 
     } else {
 
-      isRecording = false
+      var data = {
+        authorName: 'DJ Bazooka',
+      }
 
+      connection = client.createStream(data)
+      isRecording = true
     }
   }
 
@@ -50,6 +56,8 @@ client.on('open', function() {
   }
 
   function setupSuccess(event) {
+    console.log('setup great success')
+
     var audioContext = new AudioContext()
 
     // the sample rate is in audioContext.sampleRate
@@ -63,9 +71,15 @@ client.on('open', function() {
     recorder.connect(audioContext.destination)
   }
 
+  function setupFail(message) {
+    console.alert(message)
+  }
+
   function nextAudioFrame(event) {
     // abort if not record or not connected
     if (!isRecording || !connection) return
+
+    console.log('recording')
     // encode audio and send to server
     var left = event.inputBuffer.getChannelData(0)
     connection.write(convertoFloat32ToInt16(left))

@@ -9,7 +9,6 @@
   "scripts": {
     "test": "geddy jake test",
     "start": "geddy"
-
   },
   "devDependencies": {
     "request": "^2.40.0"

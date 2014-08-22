@@ -29,17 +29,16 @@ MicrophoneServer.prototype._initialize = function(opts) {
   this.websocketsServer = websocketsServer
   websocketsServer.on('connection', this._newConnection.bind(this))
 
-  console.log('websocketsServer: intialized')
+  // console.log('websocketsServer: intialized')
 }
 
 MicrophoneServer.prototype._newConnection = function(client) {
   client.on('stream', this._newStream.bind(this))
-  console.log('websocketsServer: new connection')
+  // console.log('websocketsServer: new connection')
 }
 
 MicrophoneServer.prototype._newStream = function(connection, meta) {
   var uuid = hat()
-  meta.uuid = uuid
   var rootDir = this.opts.rootDir
 
   // setup writestream
@@ -49,8 +48,11 @@ MicrophoneServer.prototype._newStream = function(connection, meta) {
     console.error('writeStream: '+err);
   });
 
+  meta.uuid = uuid
+  meta.filename = filePath
+
   // setup encoder
-  this.encoder = new lame.Encoder({
+  encoder = new lame.Encoder({
     // input
     channels: 1,        // 1 channels (mono)
     bitDepth: 16,       // 16-bit samples
@@ -71,10 +73,10 @@ MicrophoneServer.prototype._newStream = function(connection, meta) {
   // announce new recording
   this.emit('new_recording', meta)
 
-  console.log('websocketsServer: new stream')
-  console.log('websocketsServer - meta:', meta)
+  // console.log('websocketsServer: new stream')
+  // console.log('websocketsServer - meta:', meta)
 }
 
 MicrophoneServer.prototype._closeStream = function() {
-  this.writeStream.end()
+  // this.writeStream.end()
 }

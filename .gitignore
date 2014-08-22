@@ -1,3 +1,6 @@
+# ignore the audio files
+audio
+
 *.swp
 *.swo
 dist
@@ -17,7 +20,8 @@ app/public/js/core/helpers.js
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
