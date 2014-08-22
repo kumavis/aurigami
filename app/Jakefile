@@ -1,6 +1,36 @@
+var async = require('async');
 
 var t = new jake.TestTask('herddit', function () {
   this.testFiles.include('test/*.js');
   this.testFiles.include('test/**/*.js');
 });
 
+task('seed', {async:true}, function (){
+  var Post = geddy.model.Post;
+
+
+    var tasks = [];
+    for(var i = 0; i < 10; i++){
+      var opts = {
+        filename: i,
+        authorname: i
+      };
+      var Post = geddy.model.Post;
+      var post = Post.create(opts);
+
+      tasks.push(post.save.bind(post));
+    }
+
+    async.parallel(tasks, function (err, posts){
+      if (err) throw err;
+
+      tasks = [];
+      for (var i = 1; i < posts.length; i ++){
+        posts[i].setPost(posts[i-1]);
+        tasks.push(posts[i].save.bind(posts[i]));
+      }
+
+      async.parallel(tasks, complete);
+    });
+
+});

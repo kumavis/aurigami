@@ -2,8 +2,18 @@
   "name": "herddit",
   "version": "0.0.1",
   "author": "",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "async": "^0.9.0",
+    "pg": "^3.4.1"
+  },
+  "scripts": {
+    "test": "geddy jake test",
+    "start": "geddy"
+
+  },
+  "devDependencies": {
+    "request": "^2.40.0"
+  },
   "engines": {
     "node": "0.8.x"
   }

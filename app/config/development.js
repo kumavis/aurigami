@@ -33,9 +33,17 @@ var config = {
   , excludePattern: '\\.git|node_modules'
   }
 , hostname: null
-, port: 4000
+, port: 5000
 , model: {
-    defaultAdapter: 'filesystem'
+    defaultAdapter: 'postgres'
+  }
+, db: {
+  postgresql: {
+      port:5432,
+      database:'aurigami',
+      host:'127.0.0.1',
+      user:'postgres'
+    }
   }
 , sessions: {
     store: 'filesystem'
