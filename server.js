@@ -12,7 +12,6 @@ var ThroughStream = require('through')
 //
 
 var appPort = 3700
-var recordingPort = 9001
 var audioPort = 9002
 
 // Listen on a web port and respond with a chunked response header.
@@ -65,48 +64,10 @@ console.log('Audio server running at http://127.0.0.1:'+audioPort)
 
 
 //
-// Recording Server
+// App Server
 //
 
 var app = express()
 app.use(express.static(__dirname))
 app.listen(appPort)
 
-binaryServer = BinaryServer({port: recordingPort})
-
-binaryServer.on('connection', function(client) {
-
-  console.log('new connection')
-
-  var uuid = hat()
-  var filePath = path.join('audio', uuid+'.mp3')
-  var writeStream = fs.createWriteStream(filePath)
-  // This is here incase any errors occur
-  writeStream.on('error', function (err) {
-    console.error('writeStream: '+err);
-  });
-
-  var encoder = new lame.Encoder({
-    // input
-    channels: 1,        // 1 channels (mono)
-    bitDepth: 16,       // 16-bit samples
-    sampleRate: 48000,  // 48,000 Hz sample rate
-
-    // output
-    bitRate: 128,
-    outSampleRate: 22050,
-    mode: lame.MONO,    // STEREO (default), JOINTSTEREO, DUALCHANNEL or MONO
-  })
-
-  client.on('stream', function(connection, meta) {
-    console.log('new stream')
-    console.log('meta:',meta)
-    connection
-      .pipe(encoder)
-      .pipe(writeStream)
-
-    connection.on('end', function() {
-      writeStream.end()
-    })
-  })
-})

@@ -4,9 +4,10 @@
   "description": "",
   "main": "recorder.js",
   "dependencies": {
-    "hat": "^0.0.3",
     "binaryjs": "^0.2.1",
     "express": "^4.8.5",
+    "extend": "^1.3.0",
+    "hat": "^0.0.3",
     "icecast": "^1.3.1",
     "lame": "^1.1.1"
   },
