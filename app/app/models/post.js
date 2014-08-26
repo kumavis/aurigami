@@ -10,17 +10,5 @@ var Post = function () {
 
 };
 
-/*
-// Can also define them on the prototype
-Post.prototype.someOtherMethod = function () {
-  // Do some other stuff
-};
-// Can also define static methods and properties
-Post.someStaticMethod = function () {
-  // Do some other stuff
-};
-Post.someStaticProperty = 'YYZ';
-*/
-
 exports.Post = Post;
 

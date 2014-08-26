@@ -1,7 +1,7 @@
 var async = require('async');
 
 var Posts = function () {
-  this.respondsWith = ['json'];
+  this.respondsWith = ['html','json'];
 
   this.index = function (req, resp, params) {
     var _this = this;
