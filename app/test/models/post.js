@@ -30,22 +30,17 @@ tests = {
     if (err) throw err;
 
     var second = Post.create();
-    second.setPost(first);
+    first.addChild(second);
 
-    console.log("Parallel saving");
     second.save(function(err, second){
       if (err) throw err;
       first.save(function (err, first){
         if (err) throw err;
 
-        console.log(first);
-        console.log(second);
+        assert( second.childPostId === first.id, 'Parent was assigned');
 
-        assert( second.postId === first.id, 'Parent was assigned');
-
-        Post.all({}, {includes:['posts']}, function (err, posts){
+        Post.all({}, {includes:['Children']}, function (err, posts){
           if (err) throw err;
-          console.log(posts);
           assert(posts.length > 0, 'Both posts are returned');
           next();
         });

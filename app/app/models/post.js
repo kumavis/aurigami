@@ -5,8 +5,11 @@ var Post = function () {
     authorName: {type:'string'}
   });
 
-  this.belongsTo('Post');
-  this.hasMany('Posts');
+  // This requires a childPostId on the child.
+  // This `childPostId` is the parent post's ID.
+  //
+  // I agree it's a little strange.
+  this.hasMany('Children', {model:'Post'});
 
 };
 
