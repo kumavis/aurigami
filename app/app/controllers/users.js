@@ -7,7 +7,7 @@ var Users = function () {
 
   // Set this to false if you don't need e-mail activation
   // for local users
-  var EMAIL_ACTIVATION = true
+  var EMAIL_ACTIVATION = false
     , msg;
 
   if (EMAIL_ACTIVATION) {
