@@ -68,3 +68,4 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
+app/_session_store.json
