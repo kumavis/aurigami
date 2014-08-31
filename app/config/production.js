@@ -16,6 +16,8 @@
  *
 */
 
+var passport = require('./passport');
+
 var config = {
   appName: 'Geddy App'
 , detailedErrors: false
@@ -32,9 +34,9 @@ var config = {
     , password: null
     , host: 'localhost'
     , port: 27017
-    }
-  }
-
+    },
+  },
+  passport:passport
 /* // Using Postgres as the default, with only a Postgres DB
 , model: {
     defaultAdapter: 'postgres'
