@@ -1,3 +1,7 @@
+//
+// This is a demo that shows how to setup the MicrophoneServer
+//
+
 var request = require('request')
 var MicrophoneServer = require('./microphone.js')
 
@@ -12,7 +16,8 @@ var apiServer = 'http://localhost:5000/posts'
 mic.on('new_recording', function(data) {
   console.log('new_recording:', data)
 
-  request.post({uri:apiServer, form: {post: data}}, function(err, res, body) {
+  // tell the api that we have a new recording
+  request.post({uri: apiServer, form: {post: data}}, function(err, res, body) {
     console.log(err)
     console.log(body)
   })
