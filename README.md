@@ -34,4 +34,13 @@ From there you can start your app from the `aurigami/app` folder using the `gedd
 
 ### Media Server Setup
 
-This part @kumavis did, and he should fill in those details here.
+The Media Server handles the recording service and the playback server.
+
+###### App Dependencies
+
+You will then need to install dependencies.
+```
+cd sound_server
+npm i
+```
+Then start the app with `npm start`.
