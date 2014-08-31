@@ -35,7 +35,7 @@ var config = {
   , key: 'sid'
   , expiry: 14 * 24 * 60 * 60
   },
-  passport:passport
+  passport: passport
 };
 
 module.exports = config;

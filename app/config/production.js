@@ -16,7 +16,7 @@
  *
 */
 
-var passport = require('./passport');
+var passport = require('./secrets');
 
 var config = {
   appName: 'Geddy App'
@@ -36,7 +36,7 @@ var config = {
     , port: 27017
     },
   },
-  passport:passport
+  passport: passport
 /* // Using Postgres as the default, with only a Postgres DB
 , model: {
     defaultAdapter: 'postgres'
