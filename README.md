@@ -32,6 +32,31 @@ geddy jake db:migrate
 ```
 From there you can start your app from the `aurigami/app` folder using the `geddy` command.
 
+###### Configuration
+you will need a copy of the secrets config file in `app/config/secrets.json`.
+Something like:
+```json
+{
+  "passport": {
+    "successRedirect": "/",
+    "failureRedirect": "/login",
+    "twitter": {
+      "consumerKey": "XXXXX",
+      "consumerSecret": "XXXXX"
+    },
+    "facebook": {
+      "clientID": "XXXXX",
+      "clientSecret": "XXXXX"
+    },
+    "yammer": {
+      "clientID": "XXXXX",
+      "clientSecret": "XXXXX"
+    }
+  },
+  "secret": "XXXXX"
+}
+```
+
 ### Media Server Setup
 
 The Media Server handles the recording service and the playback server.
