@@ -28,24 +28,34 @@ JukeboxServer.prototype._initialize = function(opts) {
 
 JukeboxServer.prototype._newConnection = function(req, res) {
   console.log('Client connected streaming')
-  // Write the header for a streamed response
-  res.writeHead(200,{
-    'Content-Type': 'audio/mpeg',
-    'Transfer-Encoding': 'chunked',
-  })
   // Add the response to the clients array to receive streaming
   var readStream = this.getAudioReadStream(req)
-  readStream.pipe(res)
+  if (readStream) {
+    // Write the header for a streamed response
+    res.writeHead(200, {
+      'Content-Type': 'audio/mpeg',
+      'Transfer-Encoding': 'chunked',
+    })
+    readStream.pipe(res)
+  } else {
+    res.writeHead(404, {
+      'Content-Type': 'audio/mpeg',
+    })
+    res.end('no such file')
+  }
 }
 
 JukeboxServer.prototype.getAudioReadStream = function(req) {
-  console.log('getAudioReadStream:')
-  console.dir(req)
-  var uuid = '2b267787b5703361050ee787a8d2bbfb'
+  var uuid = req.url.slice(1)
   var rootDir = this.opts.rootDir
   var filePath = path.join(rootDir, uuid+'.mp3')
-  var readStream = fs.createReadStream(filePath)
-  return readStream
+  // ignore requests for missing files
+  if (fs.existsSync(filePath)) {
+    var readStream = fs.createReadStream(filePath)
+    return readStream
+  } else {
+    return null
+  }
 }
 
 JukeboxServer.prototype._closeStream = function() {

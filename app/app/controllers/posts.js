@@ -16,7 +16,7 @@ var Posts = function () {
   };
 
   this.add = function (req, resp, params) {
-    this.respond({params: params});
+    this.respondWith({params: params});
   };
 
   this.create = function (req, resp, params) {
@@ -24,14 +24,18 @@ var Posts = function () {
 
     var _this = this;
     var Post = geddy.model.Post;
-    var post = Post.create(opts);
+    var opts = params.post;
+    var post = Post.create({
+      audioUuid: opts.uuid,
+      authorName: opts.authorName,
+    });
 
     // A root post (no parent)
-    if(!opts.post){
+    if(!opts.parentId){
 
       post.save(function(err, post){
         if (err) throw err;
-        _this.respond(post);
+        _this.respondWith(post);
       });
 
     // A reply post
@@ -39,7 +43,7 @@ var Posts = function () {
 
       async.parallel([
         post.save.bind(post),
-        Post.first.bind(Post, {id:opts.post})
+        Post.first.bind(Post, {id: post.parentId})
       ], function (err, results){
         if (err) throw err;
 
@@ -49,7 +53,7 @@ var Posts = function () {
         post.setPost(parent);
         post.save(function(err, post){
           if (err) throw err;
-          _this.respond(post);
+          _this.respondWith(post);
         });
       });
 

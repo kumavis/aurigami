@@ -1,18 +1,36 @@
+<% var parent = posts[0]; -%>
+<% var children = posts.slice(1); -%>
+
 <div class="hero-unit">
-  <h2 class="id"><%= posts[0].id %></h2>
+  <h2 class="id"><%= parent.id %></h2>
+
+  <section>
+    <audio controls src="http://localhost:5002/<%= parent.audioUuid %>"></audio>
+    <br>
+    Join the conversation
+    <button onclick="toggleRecording()">Record</button>
+    <script src="http://cdn.binaryjs.com/0/binary.js"></script>
+    <script src="/js/core/recorder.js"></script>
+  </section>
+
   <%- linkTo('Edit this post', editPostPath(params.id), {class: 'btn pull-right'}); %>
   <%- linkTo('Back to list', postPath(''), {class: 'btn pull-right'}); %>
 </div>
 
 <h2>Post Properties</h2>
-<% for(var i in posts) { -%>
-<% if(i !== 'saved') { -%>
-<div class="row list-item">
-  <div class="span4">
-    <h3><%= i %></h3>
-  </div>
-  <div class="span8">
-    <h3><i class="icon-list-alt"></i><span class="<%= i %>"><%= posts[i] %></span></h3>
-  </div>
-</div>
-<% } -%><% } -%>
+<% if(children.length) { -%>
+  <% for(var i in children) { -%>
+    <% if(i !== 'saved') { -%>
+    <div class="row list-item">
+      <div class="span4">
+        <h3><%= i %></h3>
+      </div>
+      <div class="span8">
+        <h3><i class="icon-list-alt"></i><span class="<%= i %>"><%= posts[i] %></span></h3>
+      </div>
+    </div>
+    <% } -%>
+  <% } -%>
+<% } else { -%>
+  No children...
+<% } -%>

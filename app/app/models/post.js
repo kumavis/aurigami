@@ -1,7 +1,7 @@
 var Post = function () {
 
   this.defineProperties({
-    filename: {type:'string'},
+    audioUuid: {type:'string'},
     authorName: {type:'string'}
   });
 
