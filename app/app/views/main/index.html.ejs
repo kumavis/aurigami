@@ -1,15 +1,25 @@
-<!-- Lets talk about geddy -->
 <div class="hero-unit geddy-welcome-box">
   <% if (user) { %>
+
     <h1>
       Hello<% if (user.givenName) { %>, <%= user.givenName %><% } %>
     </h1>
-    <p>You've successfully logged in to this Geddy app (via <%= authType %>).</p>
-    <p><%- linkTo('Click here to log back out', logoutPath) %></p>
+    <section>
+      <audio controls src="http://localhost:5002/"></audio>
+      <br><br>
+      Join the conversation
+      <button onclick="toggleRecording()">Record</button>
+      <script src="http://cdn.binaryjs.com/0/binary.js"></script>
+      <script src="recorder.js"></script>
+    </section>
+    <p><%- linkTo('Log out', logoutPath) %></p>
+
   <% } else { %>
+
     <h1>Hello, stranger</h1>
     <p>You're not authenticated with this app.</p>
     <p><%- linkTo('Click here to create a user account.', addUserPath) %></p>
     <p><%- linkTo('Click here to log in with Facebook or Twitter.', loginPath) %></p>
+
   <% } %>
 </div>
