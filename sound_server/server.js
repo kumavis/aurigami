@@ -1,73 +1,30 @@
-var fs = require('fs')
-var path = require('path')
-var http = require('http')
-var express = require('express')
-var BinaryServer = require('binaryjs').BinaryServer
-var lame = require('lame')
-var hat = require('hat')
-var ThroughStream = require('through')
-
 //
-// Config
+// This is a demo that shows how to setup the MicrophoneServer + JukeboxServer
 //
 
-var appPort = 3700
-var audioPort = 9002
+var request = require('request')
+var MicrophoneServer = require('./microphone.js')
+var JukeboxServer = require('./jukebox.js')
 
-// Listen on a web port and respond with a chunked response header.
-var server = http.createServer(function(req, res){
-  console.log('Client connected streaming')
-  res.writeHead(200,{
-    'Content-Type': 'audio/mpeg',
-    'Transfer-Encoding': 'chunked',
-  })
-  // Add the response to the clients array to receive streaming
-  var readStream = randomAudioReadStream()
-  // var readStream = endlessRandomStream()
-  readStream.pipe(res)
+
+var mic = new MicrophoneServer({
+  port: 5001,
+  rootDir: '../audio',
 })
 
-function randomAudioReadStream() {
-  var files = fs.readdirSync('audio')
-  var randomIndex = Math.floor(files.length*Math.random())
-  var randomFile = files[randomIndex]
-  var filePath = path.join('audio', randomFile)
-  var readStream = fs.createReadStream(filePath)
-  return readStream
-}
+var jukebox = new JukeboxServer({
+  port: 5002,
+  rootDir: '../audio',
+})
 
-function endlessRandomStream() {
-  // create a dummy stream
-  var throughStream = ThroughStream(function write(data) {
-    this.emit('data', data)
-  }, function end(data) {
-    this.emit('end')
-  }, {autoDestroy: false})
+var apiServer = 'http://localhost:5000/posts'
 
-  var oldStream;
-  function nextStream() {
-    // cleanup
-    // if (oldStream) oldStream.end()
-    // new stream
-    var readStream = randomAudioReadStream()
-    oldStream = readStream
-    readStream.on('end', nextStream)
-    readStream.pipe(throughStream)
-  }
+mic.on('new_recording', function(data) {
+  console.log('new_recording:', data)
 
-  nextStream()
-  return throughStream
-}
-
-server.listen(audioPort, '127.0.0.1')
-console.log('Audio server running at http://127.0.0.1:'+audioPort)
-
-
-//
-// App Server
-//
-
-var app = express()
-app.use(express.static(__dirname))
-app.listen(appPort)
-
+  // tell the api that we have a new recording
+  request.post({uri: apiServer, form: {post: data}}, function(err, res, body) {
+    console.log(err)
+    console.log(body)
+  })
+})

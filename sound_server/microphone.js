@@ -8,7 +8,7 @@ var EventEmitter = require('events').EventEmitter
 
 module.exports = MicrophoneServer
 
-/*
+/* example opts:
   {
     port: 5001,
     rootDir: 'audio',
