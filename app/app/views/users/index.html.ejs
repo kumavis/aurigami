@@ -8,10 +8,10 @@
 <% for (var i = 0, ii = users.length; i < ii; i++) { %>
   <div class="row list-item" id="user-<%= users[i].id; %>">
     <div class="span8">
-      <h3><%- linkTo(users[i].id, userPath(users[i].id)); %></h3>
+      <h3><%- linkTo(users[i].username, userPath(users[i].id)); %></h3>
     </div>
     <div class="span4">
-      <h3><i class="icon-list-alt"></i><%= users[i].id; %></h3>
+      <h3><%= users[i].email; %></h3>
     </div>
   </div>
 <% } %>

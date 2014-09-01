@@ -1,5 +1,5 @@
 <div class="hero-unit">
-  <h2 class="id"><%= user.id %></h2>
+  <h2 class="username"><%= user.username %></h2>
   <%- linkTo('Edit this user', editUserPath(params.id), {class: 'btn pull-right'}); %>
   <%- linkTo('Back to list', userPath(''), {class: 'btn pull-right'}); %>
 </div>

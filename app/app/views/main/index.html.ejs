@@ -2,7 +2,7 @@
   <% if (user) { %>
 
     <h1>
-      Hello<% if (user.givenName) { %>, <%= user.givenName %><% } %>
+      Hello<% if (user.username) { %>, <%= user.username %><% } %>
     </h1>
     <section>
       <audio controls src="http://localhost:5002/"></audio>
