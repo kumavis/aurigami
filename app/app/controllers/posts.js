@@ -1,17 +1,17 @@
 var async = require('async');
 
 var Posts = function () {
-  this.respondsWith = ['html','json'];
+  this.respondsWith = ['html', 'json'];
 
   this.index = function (req, resp, params) {
     var _this = this;
     var Post = geddy.model.Post;
 
-    Post.all({}, {limit:50, sort:{ createdAt: 'desc'}},
-      function (err, posts){
-      if (err) throw err;
-
-      _this.respond(posts);
+    Post.all({}, {limit:50, sort:{ createdAt: 'desc'}}, function(err, posts) {
+      if (err) {
+        throw err;
+      }
+      _this.respondWith(posts, {type:'Post'});
     });
   };
 
@@ -22,23 +22,20 @@ var Posts = function () {
   this.create = function (req, resp, params) {
     if (!params.post) throw new geddy.errors.BadRequestError("Include a post object!");
 
-    var opts = params.post;
-    var Post = geddy.model.Post;
     var _this = this;
+    var Post = geddy.model.Post;
+    var post = Post.create(opts);
 
-    var post;
-
+    // A root post (no parent)
     if(!opts.post){
-      // An original Post!  Just save it!
-      post = Post.create(opts);
+
       post.save(function(err, post){
         if (err) throw err;
         _this.respond(post);
       });
 
+    // A reply post
     } else {
-      // A reply post!  Make it and get the original!
-      post = Post.create(opts);
 
       async.parallel([
         post.save.bind(post),
@@ -55,34 +52,85 @@ var Posts = function () {
           _this.respond(post);
         });
       });
+
     }
+
   };
 
   this.show = function (req, resp, params) {
     var _this = this;
     var Post = geddy.model.Post;
 
-    Post.all({or:[{id:params.id}, {postId:params.id}]}, function (err, posts){
+    Post.all({or:[{id:params.id}, {childPostId:params.id}]}, function (err, posts){
       if (err) throw err;
 
-      _this.respond(posts);
+      _this.respondWith(posts);
     });
   };
 
   this.edit = function (req, resp, params) {
-    this.respond({params: params});
+    var _this = this;
+    var Post = geddy.model.Post;
+
+    Post.first(params.id, function(err, post) {
+      if (err) {
+        throw err;
+      }
+      if (!post) {
+        throw new geddy.errors.BadRequestError();
+      }
+      else {
+        _this.respondWith(post);
+      }
+    });
   };
 
   this.update = function (req, resp, params) {
-    // Save the resource, then display the item page
-    this.redirect({controller: this.name, id: params.id});
+    var _this = this;
+    var Post = geddy.model.Post;
+
+    Post.first(params.id, function(err, post) {
+      if (err) {
+        throw err;
+      }
+      post.updateProperties(params);
+
+      if (!post.isValid()) {
+        _this.respondWith(post);
+      } else {
+        // Save the resource, then display the item page
+        post.save(function(err, data) {
+          if (err) {
+            throw err;
+          }
+          // _this.respondWith(post, {status: err});
+          this.redirect({controller: this.name, id: params.id});
+        });
+      }
+    });
   };
 
   this.remove = function (req, resp, params) {
-    this.respond({params: params});
+    var _this = this;
+    var Post = geddy.model.Post;
+
+    Post.first(params.id, function(err, post) {
+      if (err) {
+        throw err;
+      }
+      if (!post) {
+        throw new geddy.errors.BadRequestError();
+      } else {
+        Post.remove(params.id, function(err) {
+          if (err) {
+            throw err;
+          }
+          _this.respondWith(post);
+        });
+      }
+    });
   };
 
 };
 
 exports.Posts = Posts;
-

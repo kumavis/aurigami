@@ -39,8 +39,6 @@ router.get('/').to('Main.index');
 //   this.get('/print(.:format)').to('Hemispheres.print');
 // });
 
-router.resource('posts');
-
 router.get('/login').to('Main.login');
 router.get('/logout').to('Main.logout');
 router.post('/auth/local').to('Auth.local');
@@ -52,5 +50,8 @@ router.get('/auth/yammer').to('Auth.yammer');
 router.get('/auth/yammer/callback').to('Auth.yammerCallback');
 router.get('/auth/google').to('Auth.google');
 router.get('/auth/google/callback').to('Auth.googleCallback');
+
 router.resource('users');
+router.resource('posts');
+
 exports.router = router;
