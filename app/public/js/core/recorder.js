@@ -35,7 +35,10 @@ client.on('open', function() {
 
     } else {
 
+      var parentId = $(event.target).data('parent-id')
+
       var data = {
+        parentId: parentId,
         authorName: 'DJ Bazooka',
       }
 
@@ -72,7 +75,7 @@ client.on('open', function() {
   }
 
   function setupFail(message) {
-    console.alert(message)
+    console.error(message)
   }
 
   function nextAudioFrame(event) {

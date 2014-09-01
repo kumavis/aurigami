@@ -28,6 +28,7 @@ var Posts = function () {
     var post = Post.create({
       audioUuid: opts.uuid,
       authorName: opts.authorName,
+      childPostId: opts.parentId,
     });
 
     // A root post (no parent)
@@ -43,18 +44,10 @@ var Posts = function () {
 
       async.parallel([
         post.save.bind(post),
-        Post.first.bind(Post, {id: post.parentId})
+        Post.first.bind(Post, {id: opts.parentId})
       ], function (err, results){
         if (err) throw err;
-
-        var post = results[0];
-        var parent = results[1];
-
-        post.setPost(parent);
-        post.save(function(err, post){
-          if (err) throw err;
-          _this.respondWith(post);
-        });
+        _this.respondWith(post);
       });
 
     }

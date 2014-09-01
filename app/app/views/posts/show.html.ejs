@@ -2,13 +2,13 @@
 <% var children = posts.slice(1); -%>
 
 <div class="hero-unit">
-  <h2 class="id"><%= parent.id %></h2>
+  <h2 class="id">Message from <%= parent.authorName %></h2>
 
   <section>
     <audio controls src="http://localhost:5002/<%= parent.audioUuid %>"></audio>
     <br>
     Join the conversation
-    <button onclick="toggleRecording()">Record</button>
+    <button onclick="toggleRecording()" data-parent-id="<%= parent.id %>">Record</button>
     <script src="http://cdn.binaryjs.com/0/binary.js"></script>
     <script src="/js/core/recorder.js"></script>
   </section>
@@ -17,19 +17,18 @@
   <%- linkTo('Back to list', postPath(''), {class: 'btn pull-right'}); %>
 </div>
 
-<h2>Post Properties</h2>
+<h2>Responses</h2>
 <% if(children.length) { -%>
   <% for(var i in children) { -%>
-    <% if(i !== 'saved') { -%>
+    <% var child = children[i]; -%>
     <div class="row list-item">
       <div class="span4">
-        <h3><%= i %></h3>
+        <h4><%- linkTo("response by "+child.authorName, postPath(child.id)); %></h4>
       </div>
       <div class="span8">
-        <h3><i class="icon-list-alt"></i><span class="<%= i %>"><%= posts[i] %></span></h3>
+        <audio controls src="http://localhost:5002/<%= child.audioUuid %>"></audio>
       </div>
     </div>
-    <% } -%>
   <% } -%>
 <% } else { -%>
   No children...
