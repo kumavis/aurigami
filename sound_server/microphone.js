@@ -80,3 +80,4 @@ MicrophoneServer.prototype._newStream = function(connection, meta) {
 MicrophoneServer.prototype._closeStream = function() {
   // this.writeStream.end()
 }
+
