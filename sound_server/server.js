@@ -11,11 +11,13 @@ var mic = new MicrophoneServer({
   port: 5001,
   rootDir: '../audio',
 })
+console.log('Microphone server listening on port 5001');
 
 var jukebox = new JukeboxServer({
   port: 5002,
   rootDir: '../audio',
 })
+console.log('Jukebox server listening on port 5002');
 
 var apiServer = 'http://localhost:5000/posts'
 
